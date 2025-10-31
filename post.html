@@ -51,50 +51,79 @@
       const container = document.getElementById('postsContainer');
       container.innerHTML = ''; // clear old content
 
-      for(let i =0;i < posts.length;i++){
+    for(let i =0;i < 10;i++){
         post = posts[i];
+      
+      fetch(`https://api.thecatapi.com/v1/images/search`)
+      .then(response => response.json())
+      .then(images => {
+        const imgUrl = images[0].url;
+        // const uniqueUrl = `${imgUrl}?rand=${Math.random()}`;
         const card = document.createElement('div');
         card.className = 'card';
         card.style.width = '18rem';
         card.innerHTML = `
-          <img src="https://randomuser.me/api/portraits/thumb/lego/2.jpg" class="card-img-top" alt="Random Cat">
+          <img src= "${imgUrl}" class="card-img-top" alt="Random Cat">
           <div class="card-body">
-            <h5 class="card-title">${post.title}</h5>
-            <p class="card-text">${post.body}</p>
-            <p class="text-muted">User ID: ${post.userId}</p>
+            <h5 class="card-title">${posts[i].title}</h5>
+            <p class="card-text">${posts[i].body}</p>
+            <p class="text-muted">User ID: ${posts[i].userId}</p>
           </div>
         `;
         container.appendChild(card);
-      }
-    }
-
+      })
+      .catch(console.error);
+    }}
+    //   for(let i =0;i < posts.length;i++){
+    //     post = posts[i];
+    //     const card = document.createElement('div');
+    //     card.className = 'card';
+    //     card.style.width = '18rem';
+    //     card.innerHTML = `
+    //       <img src= "${imageUrl}" class="card-img-top" alt="Random Cat">
+    //       <div class="card-body">
+    //         <h5 class="card-title">${posts[i].title}</h5>
+    //         <p class="card-text">${posts[i].body}</p>
+    //         <p class="text-muted">User ID: ${posts[i].userId}</p>
+    //       </div>
+    //     `;
+    //     container.appendChild(card);
+    //   }
+    // }
+  
     // Step 1: Initially load static posts
     function loadPosts(){
     // 🧱 Step 1: Replcae the below static data by fetching data from 
     //  https://jsonplaceholder.typicode.com/posts/
-    const postsData = [
-      {
-        userId: 1,
-        id: 1,
-        title: "Static Post One",
-        body: "This is the first static post. You’ll replace this data later using the API."
-      },
-      {
-        userId: 2,
-        id: 2,
-        title: "Static Post Two",
-        body: "This post is also hardcoded. Soon you’ll load real posts from JSONPlaceholder."
-      },
-      {
-        userId: 3,
-        id: 3,
-        title: "Static Post Three",
-        body: "After mastering this, you’ll fetch random cat images for each post!"
-      }
-    ];
+    try {
+    fetch(`https://jsonplaceholder.typicode.com/posts/`)
+    .then(response => response.json())
+    .then(postsData => displayPosts(postsData))
+  } catch (error) {
+    console.error(error);
+  }
+}
+    // const postsData = [
+    //   {
+    //     userId: 1,
+    //     id: 1,
+    //     title: "Static Post One",
+    //     body: "This is the first static post. You’ll replace this data later using the API."
+    //   },
+    //   {
+    //     userId: 2,
+    //     id: 2,
+    //     title: "Static Post Two",
+    //     body: "This post is also hardcoded. Soon you’ll load real posts from JSONPlaceholder."
+    //   },
+    //   {
+    //     userId: 3,
+    //     id: 3,
+    //     title: "Static Post Three",
+    //     body: "After mastering this, you’ll fetch random cat images for each post!"
+    //   }
+    // ];
 
-        displayPosts(postsData);
-    }
 
     /*
       ⚡ Step 2 CHALLENGE:
